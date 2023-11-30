@@ -19,7 +19,7 @@ const Input = ({
   const handleOnChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     onInputChange?.(e?.target?.value)
   }
-  const handleOnKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (
+  const handleOnKeyUp: React.KeyboardEventHandler<HTMLTextAreaElement> = (
     e
   ) => {
     if (e?.keyCode === 13) {
@@ -33,7 +33,7 @@ const Input = ({
   return (
     <Textarea
       onChange={handleOnChange}
-      onKeyDown={handleOnKeyDown}
+      onKeyUp={handleOnKeyUp}
       value={value}
       {...props}
       className={cn(

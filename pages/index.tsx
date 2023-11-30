@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google"
 import Input from "@/components/components/Input"
 import ConversationItem from "./../components/components/ConversationItem"
-import { useState, useEffect } from "react"
+import { useState, useRef } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -15,6 +15,13 @@ export default function Home() {
     }[]
   >([])
 
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    if (messagesEndRef) {
+      messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" })
+    }
+  }
   const handleInputChange = (e: string) => {
     setInput(e)
   }
@@ -23,7 +30,7 @@ export default function Home() {
     try {
       setConversations([
         ...conversations,
-        {isQuestion: false, content: answer},
+        { isQuestion: false, content: answer },
         { isQuestion: true, content: payload.query }
       ])
       setAnswer("")
@@ -43,7 +50,7 @@ export default function Home() {
         const { done, value } = await reader?.read()
         const decoder = new TextDecoder()
         setAnswer((ans) => [ans, decoder.decode(value)].join(" "))
-
+        scrollToBottom()
         if (done) {
           break
         }
@@ -56,7 +63,7 @@ export default function Home() {
       console.error("Error during streaming request:", error)
     }
   }
-  
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between px-24 pt-10 bg-[#343541] relative ${inter.className}`}
@@ -70,6 +77,7 @@ export default function Home() {
           />
         ))}
         {!!answer && <ConversationItem content={answer} />}
+        <div ref={messagesEndRef} />
       </div>
       <div className="fixed bottom-0 left-0 right-0 pb-10 bg-[#343541] pt-1">
         <Input
