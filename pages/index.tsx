@@ -49,7 +49,7 @@ export default function Home() {
       while (true) {
         const { done, value } = await reader?.read()
         const decoder = new TextDecoder()
-        setAnswer((ans) => [ans, decoder.decode(value)].join(" "))
+        setAnswer((ans) => [ans, decoder.decode(value)].join(""))
         scrollToBottom()
         if (done) {
           break
